@@ -318,7 +318,7 @@ async function loginUser(event) {
         // Redirect after successful login
         setTimeout(() => {
 
-            window.location.href = "dashboard.html";
+            window.location.href = "Dashboard.html";
 
         }, 1000);
 
@@ -493,7 +493,7 @@ async function checkUserSession() {
                 session.user.email
             );
 
-            window.location.href = "dashboard.html";
+            window.location.href = "Dashboard.html";
         }
 
     } catch (error) {
