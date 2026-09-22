@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 await supabaseClient.auth.signOut();
             }
             localStorage.removeItem('foodwaste_admin_name');
-            window.location.href = "login.html";
+            window.location.href = "index.html";
         });
     }
 
