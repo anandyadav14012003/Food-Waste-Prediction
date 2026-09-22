@@ -261,7 +261,7 @@ function initSidebarNavigation() {
                 if (supabaseClient) {
                     await supabaseClient.auth.signOut();
                 }
-                window.location.href = 'login.html';
+                window.location.href = 'index.html';
             }
         });
     }
