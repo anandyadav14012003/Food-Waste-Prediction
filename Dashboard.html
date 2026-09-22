@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodWaste AI - Admin Dashboard</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="Dashboard.css">
+</head>
+<body>
+
+    <!-- Mobile Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- App Container -->
+    <div class="app-container">
+
+        <!-- LEFT SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+    <a href="Dashboard.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit; width: 100%;">
+        <div class="brand-logo">
+            <i class="fa-solid fa-seedling"></i>
+        </div>
+        <div class="brand-title">
+            <h2>FoodWaste AI</h2>
+            <span>Smart Analytics</span>
+        </div>
+    </a>
+    <button class="mobile-close-btn" id="mobileCloseBtn">
+        <i class="fa-solid fa-xmark"></i>
+    </button>
+</div>
+
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-page="dashboard">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-page="add-data">
+                    <i class="fa-solid fa-circle-plus"></i>
+                    <span>Add Daily Data</span>
+                </a>
+                <a href="#" class="nav-item" data-page="food-records">
+                    <i class="fa-solid fa-clipboard-list"></i>
+                    <span>Food Records</span>
+                </a>
+                <a href="#" class="nav-item" data-page="predictions">
+                    <i class="fa-solid fa-brain"></i>
+                    <span>Predictions</span>
+                </a>
+                <a href="#" class="nav-item" data-page="recommendations">
+                    <i class="fa-solid fa-lightbulb"></i>
+                    <span>Recommendations</span>
+                </a>
+                <a href="#" class="nav-item" data-page="analytics">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Analytics</span>
+                </a>
+                <a href="#" class="nav-item" data-page="reports">
+                    <i class="fa-solid fa-file-invoice"></i>
+                    <span>Reports</span>
+                </a>
+                <a href="#" class="nav-item" data-page="settings">
+                    <i class="fa-solid fa-gear"></i>
+                    <span>Settings</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="admin-profile">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150" alt="Admin Avatar" class="admin-avatar">
+                    <div class="admin-info">
+                        <h4 id="sidebarAdminName">---</h4>
+                    </div>
+                </div>
+                <button class="logout-btn" id="logoutBtn" title="Logout">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </button>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT AREA -->
+        <main class="main-content">
+            
+            <!-- TOP HEADER -->
+            <header class="top-header">
+                <div class="header-left">
+                    <button class="menu-toggle-btn" id="menuToggleBtn">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <div class="page-title-group">
+                        <h1>Dashboard</h1>
+                        <p>Monitor food consumption, waste, and AI-powered predictions</p>
+                    </div>
+                </div>
+
+                <div class="header-right">
+                    <div class="date-selector-wrapper">
+                        <i class="fa-regular fa-calendar"></i>
+                        <input type="date" id="dashboardDate" class="date-input">
+                    </div>
+                </div>
+            </header>
+
+            <!-- DASHBOARD CONTENT WRAPPER -->
+            <div class="dashboard-content">
+
+                <!-- KPI CARDS SECTION (4 Responsive Cards) -->
+                <section class="kpi-grid">
+                    
+                    <!-- Card 1 — Today's Customers -->
+                    <div class="kpi-card">
+                        <div class="kpi-info">
+                            <span class="kpi-subtitle">Customers Served Today</span>
+                            <h3 class="kpi-value" id="kpiCustomers">--</h3>
+                            <!-- <span class="kpi-trend" id="kpiCustomersTrend"><i class="fa-solid fa-arrow-trend-up"></i> Calculating...</span> -->
+                        </div>
+                        <div class="kpi-icon bg-blue">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                    </div>
+
+                    <!-- Card 2 — Food Prepared -->
+                    <div class="kpi-card">
+                        <div class="kpi-info">
+                            <span class="kpi-subtitle">Food Prepared Today</span>
+                            <h3 class="kpi-value" id="kpiPrepared">--</h3>
+                            <!-- <span class="kpi-trend" id="kpiPreparedTrend"><i class="fa-solid fa-scale-balanced"></i> Loading...</span> -->
+                        </div>
+                        <div class="kpi-icon bg-emerald">
+                            <i class="fa-solid fa-utensils"></i>
+                        </div>
+                    </div>
+
+                    <!-- Card 3 — Food Wasted -->
+                    <div class="kpi-card">
+                        <div class="kpi-info">
+                            <span class="kpi-subtitle">Waste Generated Today</span>
+                            <h3 class="kpi-value" id="kpiWasted">--</h3>
+                            <!-- <span class="kpi-trend" id="kpiWastedTrend"><i class="fa-solid fa-recycle"></i> Loading...</span> -->
+                        </div>
+                        <div class="kpi-icon bg-amber">
+                            <i class="fa-solid fa-recycle"></i>
+                        </div>
+                    </div>
+
+                    <!-- Card 4 — Waste Percentage -->
+                    <div class="kpi-card">
+                        <div class="kpi-info">
+                            <span class="kpi-subtitle">Today's Waste Ratio</span>
+                            <h3 class="kpi-value" id="kpiWastePercent">--</h3>
+                            <!-- <span class="kpi-trend" id="kpiWastePercentTrend">Loading...</span> -->
+                        </div>
+                        <div class="kpi-icon bg-teal">
+                            <i class="fa-solid fa-chart-pie"></i>
+                        </div>
+                    </div>
+
+                </section>
+
+                <!-- AI DEMAND PREDICTION & INTELLIGENT RECOMMENDATION SECTION -->
+                <section class="ai-insights-grid">
+                    
+                    <!-- AI Demand Prediction Card -->
+                    <div class="card ai-prediction-card">
+                        <div class="card-header-flex">
+                            <div class="card-title-group">
+                                <div class="ai-badge">
+                                    <i class="fa-solid fa-brain"></i> AI Model Active
+                                </div>
+                                <h2>AI Demand Prediction</h2>
+                            </div>
+                            <span class="pulse-indicator" title="Model live sync"></span>
+                        </div>
+                        
+                        <div class="prediction-highlight-box">
+                            <div class="pred-main-metric">
+                                <span class="pred-label">Tomorrow's Expected Customers</span>
+                                <h1 class="pred-number" id="predExpectedCustomers">-- <span class="unit">Customers</span></h1>
+                            </div>
+                            <div class="pred-sub-metrics">
+                                <div class="sub-metric-item">
+                                    <span class="sub-label">Prediction Confidence</span>
+                                    <span class="sub-val text-success" id="predConfidence">--%</span>
+                                </div>
+                                <div class="sub-metric-item">
+                                    <span class="sub-label">Predicted Food Req.</span>
+                                    <span class="sub-val" id="predFoodReq">-- kg</span>
+                                </div>
+                                <div class="sub-metric-item">
+                                    <span class="sub-label">Recommended Prep</span>
+                                    <span class="sub-val highlight" id="predRecommendedPrep">-- kg</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-footer-action">
+                            <button class="btn btn-outline" id="viewPredictionDetailsBtn">
+                                <i class="fa-solid fa-chart-line"></i> View Prediction Details
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ANALYTICS CHARTS SECTION 1 (Waste Trend & Prepared vs Consumed) -->
+                <section class="charts-grid-two">
+                    
+                    <!-- Food Waste Trend Line Chart -->
+                    <div class="card chart-card">
+                        <div class="card-header-flex">
+                            <h2>Food Waste Trend</h2>
+                            <div class="chart-filter-group" id="wasteTrendFilters">
+                                <button class="filter-btn active" data-range="7days">7 Days</button>
+                                <button class="filter-btn" data-range="30days">30 Days</button>
+                                <button class="filter-btn" data-range="3months">3 Months</button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="wasteTrendChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Food Prepared vs Consumed Bar Chart -->
+                    <div class="card chart-card">
+                        <div class="card-header-flex">
+                            <h2>Food Prepared vs Consumed</h2>
+                            <span class="chart-subtitle-badge" id="prepVsConsumedBadge">Last 7 Days</span>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="preparedVsConsumedChart"></canvas>
+                        </div>
+                    </div>
+
+                </section>
+
+                <!-- CUSTOMER DEMAND ANALYSIS SECTION -->
+                <section class="card demand-analysis-card">
+                    <div class="card-header-flex">
+                        <div class="card-title-group">
+                            <h2>Customer Demand Analysis</h2>
+                            <p>Actual vs Machine Learning predicted customer counts</p>
+                        </div>
+                        <div class="demand-stats-summary">
+                            <div class="summary-pill">
+                                <i class="fa-solid fa-fire text-amber"></i> Peak: <strong id="summaryPeakDays">--</strong>
+                            </div>
+                            <div class="summary-pill">
+                                <i class="fa-solid fa-user-group text-blue"></i> Avg Daily: <strong id="summaryAvgCustomers">--</strong>
+                            </div>
+                            <div class="summary-pill">
+                                <i class="fa-solid fa-trash-can text-teal"></i> Avg Waste: <strong id="summaryAvgWaste">--</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chart-container-large">
+                        <canvas id="customerDemandChart"></canvas>
+                    </div>
+                </section>
+
+                <!-- AI INSIGHTS & ALERTS SECTION -->
+                <section class="insights-alerts-section">
+                    <div class="section-heading">
+                        <h2>AI Insights & Alerts</h2>
+                        <p>Real-time automated diagnostic notes from your restaurant telemetry</p>
+                    </div>
+
+                    <!-- Dynamic Insights Grid Container -->
+                    <div class="insights-grid" id="aiInsightsGrid">
+                        <!-- Populated dynamically via JS -->
+                        <div class="insight-card info-alert">
+                            <div class="insight-icon-wrap"><i class="fa-solid fa-spinner fa-spin"></i></div>
+                            <div class="insight-content">
+                                <h3>Loading telemetry...</h3>
+                                <p>Fetching real-time algorithmic diagnostics.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- RECENT FOOD RECORDS TABLE -->
+                <section class="card table-card">
+                    <div class="card-header-flex">
+                        <div class="card-title-group">
+                            <h2>Recent Food Records</h2>
+                            <p>Daily operational logs and waste calculation metrics</p>
+                        </div>
+                        <button class="btn btn-outline btn-sm" id="viewAllRecordsBtn">
+                            View All Records →
+                        </button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Day</th>
+                                    <th>Customers</th>
+                                    <th>Food Prepared</th>
+                                    <th>Food Consumed</th>
+                                    <th>Food Wasted</th>
+                                    <th>Waste %</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <!-- Dynamically Populated Table Body -->
+                            <tbody id="recentRecordsBody">
+                                <tr>
+                                    <td colspan="8" style="text-align: center; color: var(--text-secondary);">Loading recent logs...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+            </div>
+
+            <!-- FOOTER -->
+            <footer class="dashboard-footer">
+                <p>&copy; 2026 FoodWise. All Rights Reserved. Food Waste Prediction & Intelligent Food Quantity Recommendation System.</p>
+                <div class="footer-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">System Diagnostics</a>
+                </div>
+            </footer>
+
+        </main>
+    </div>
+
+    <!-- MODAL POPUPS (For interactive buttons) -->
+    <div class="modal-backdrop" id="appModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="modalTitle">Notification Details</h3>
+                <button class="modal-close" id="modalCloseBtn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body" id="modalBodyContent">
+                <!-- Dynamic Content -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="modalActionBtn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom JavaScript & Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>

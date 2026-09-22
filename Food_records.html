@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Food Records - FoodWaste AI</title>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="Dashboard.css">
+</head>
+<body>
+
+    <div class="dashboard-container">
+        
+        <!-- SIDEBAR OVERLAY FOR MOBILE -->
+        <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+        <!-- SIDEBAR NAVIGATION -->
+        <aside id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+    <a href="Dashboard.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit; width: 100%;">
+        <div class="brand-logo">
+            <i class="fa-solid fa-seedling"></i>
+        </div>
+        <div class="brand-title">
+            <h2>FoodWaste AI</h2>
+            <span>Smart Analytics</span>
+        </div>
+    </a>
+    <button class="mobile-close-btn" id="mobileCloseBtn">
+        <i class="fa-solid fa-xmark"></i>
+    </button>
+</div>
+
+            <ul class="sidebar-nav" style="list-style: none; padding: 0; margin: 20px 0;">
+                <li>
+                    <a href="Dashboard.html" class="nav-item" data-page="dashboard" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: #475569; font-weight: 500; border-radius: 8px; margin-bottom: 4px;">
+                        <i class="fa-solid fa-chart-pie" style="width: 20px; text-align: center;"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="Daily_data.html" class="nav-item" data-page="add-daily-data" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: #475569; font-weight: 500; border-radius: 8px; margin-bottom: 4px;">
+                        <i class="fa-solid fa-circle-plus" style="width: 20px; text-align: center;"></i>
+                        <span>Add Daily Data</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="Food_records.html" class="nav-item active" data-page="food-records" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: #10b981; background: #ecfdf5; font-weight: 600; border-radius: 8px; margin-bottom: 4px;">
+                        <i class="fa-solid fa-utensils" style="width: 20px; text-align: center;"></i>
+                        <span>Food Records</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="Prediction.html" class="nav-item" data-page="predictions" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: #475569; font-weight: 500; border-radius: 8px; margin-bottom: 4px;">
+                        <i class="fa-solid fa-brain" style="width: 20px; text-align: center;"></i>
+                        <span>AI Predictions</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="recommendations.html" class="nav-item" data-page="recommendations" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: #475569; font-weight: 500; border-radius: 8px; margin-bottom: 4px;">
+                        <i class="fa-solid fa-lightbulb" style="width: 20px; text-align: center;"></i>
+                        <span>Recommendations</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="analytics.html" class="nav-item" data-page="analytics" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: #475569; font-weight: 500; border-radius: 8px; margin-bottom: 4px;">
+                        <i class="fa-solid fa-chart-line" style="width: 20px; text-align: center;"></i>
+                        <span>Analytics</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="reports.html" class="nav-item" data-page="reports" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: #475569; font-weight: 500; border-radius: 8px; margin-bottom: 4px;">
+                        <i class="fa-solid fa-file-arrow-down" style="width: 20px; text-align: center;"></i>
+                        <span>Reports</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="settings.html" class="nav-item" data-page="settings" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: #475569; font-weight: 500; border-radius: 8px; margin-bottom: 4px;">
+                        <i class="fa-solid fa-gear" style="width: 20px; text-align: center;"></i>
+                        <span>Settings</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-footer" style="padding-top: 15px; border-top: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">
+                <div class="admin-profile" style="display: flex; align-items: center; gap: 10px;">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" alt="User" class="admin-avatar" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover;">
+                    <div class="admin-info">
+                        <h4 id="sidebarAdminName" style="font-size: 14px; margin: 0; color: #1e293b;">---</h4>
+                        <!-- <p style="font-size: 11px; margin: 0; color: #64748b;">Indore, MP</p> -->
+                    </div>
+                </div>
+                <button class="logout-btn" title="Logout" style="background: none; border: none; color: #ef4444; font-size: 16px; cursor: pointer;">
+                    <i class="fa-solid fa-power-off"></i>
+                </button>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT WRAPPER -->
+        <div class="main-content">
+            
+            <!-- TOP HEADER -->
+            <header class="top-header">
+                <div class="header-left">
+                    <button id="sidebarToggle" class="sidebar-toggle-btn"><i class="fa-solid fa-bars"></i></button>
+                    <h2>Historical Food Records</h2>
+                </div>
+                <div class="header-right" style="display: flex; align-items: center; gap: 15px;">
+                    <div class="date-display" id="currentDateDisplay" style="font-size: 13px; font-weight: 600; color: #475569; background: #f1f5f9; padding: 6px 12px; border-radius: 6px;">
+                        <i class="fa-regular fa-calendar" style="margin-right: 6px; color: #10b981;"></i>Loading Date...
+                    </div>
+                    <a href="Daily_data.html" class="btn-primary" style="background: #10b981; color: white; padding: 8px 15px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 500;">
+                        <i class="fa-solid fa-plus"></i> Add New Record
+                    </a>
+                </div>
+            </header>
+
+            <!-- PAGE CONTENT AREA -->
+            <main class="content-body" style="padding: 20px;">
+                
+                <div class="card" style="background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h3 style="margin: 0; font-size: 18px; color: #1e293b;">All Recorded Entries from Database</h3>
+                        <span id="recordCount" style="font-size: 14px; color: #64748b;">Loading records...</span>
+                    </div>
+
+                    <!-- Responsive Table Container -->
+                    <div style="overflow-x: auto;">
+                        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 14px;">
+                            <thead>
+                                <tr style="border-bottom: 2px solid #e2e8f0; color: #475569;">
+                                    <th style="padding: 12px;">Date</th>
+                                    <th style="padding: 12px;">Day</th>
+                                    <th style="padding: 12px;">Customers</th>
+                                    <th style="padding: 12px;">Prepared</th>
+                                    <th style="padding: 12px;">Consumed</th>
+                                    <th style="padding: 12px;">Wasted</th>
+                                    <th style="padding: 12px;">Waste %</th>
+                                    <th style="padding: 12px;">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="allFoodRecordsBody">
+                                <!-- Data rows will be injected dynamically via JavaScript -->
+                                <tr>
+                                    <td colspan="8" style="text-align: center; padding: 20px; color: #94a3b8;">Connecting to Supabase...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Script to set current date & mobile sidebar triggers -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set Current Date in Top Header
+            const dateDisplay = document.getElementById('currentDateDisplay');
+            if (dateDisplay) {
+                const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+                const todayStr = new Date().toLocaleDateString('en-US', options);
+                dateDisplay.innerHTML = `<i class="fa-regular fa-calendar" style="margin-right: 6px; color: #10b981;"></i>${todayStr}`;
+            }
+
+            // Mobile Sidebar Toggle
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebarClose = document.getElementById('sidebarClose');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+            if (sidebarToggle && sidebar && sidebarOverlay) {
+                sidebarToggle.addEventListener('click', () => {
+                    sidebar.classList.add('show');
+                    sidebarOverlay.classList.add('show');
+                });
+            }
+
+            const closeSidebarMenu = () => {
+                if (sidebar) sidebar.classList.remove('show');
+                if (sidebarOverlay) sidebarOverlay.classList.remove('show');
+            };
+
+            if (sidebarClose) sidebarClose.addEventListener('click', closeSidebarMenu);
+            if (sidebarOverlay) sidebarOverlay.addEventListener('click', closeSidebarMenu);
+        });
+    </script>
+
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Page Logic Script -->
+    <script src="food_records.js"></script>
+</body>
+</html>

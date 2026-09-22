@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - FoodWaste AI</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main Dashboard Stylesheet -->
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Sidebar Overlay for Mobile -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- Left Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+    <a href="Dashboard.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit; width: 100%;">
+        <div class="brand-logo">
+            <i class="fa-solid fa-seedling"></i>
+        </div>
+        <div class="brand-title">
+            <h2>FoodWaste AI</h2>
+            <span>Smart Analytics</span>
+        </div>
+    </a>
+    <button class="mobile-close-btn" id="mobileCloseBtn">
+        <i class="fa-solid fa-xmark"></i>
+    </button>
+</div>
+
+            <nav class="sidebar-nav">
+                <a href="Dashboard.html" class="nav-item">
+                    <i class="fa-solid fa-chart-pie"></i> Dashboard
+                </a>
+                <a href="Food_records.html" class="nav-item">
+                    <i class="fa-solid fa-utensils"></i> Food Records
+                </a>
+                <a href="Daily_data.html" class="nav-item">
+                    <i class="fa-solid fa-circle-plus"></i> Add Daily Data
+                </a>
+                <a href="Prediction.html" class="nav-item">
+                    <i class="fa-solid fa-brain"></i> AI Predictions
+                </a>
+                <a href="recommendations.html" class="nav-item">
+                    <i class="fa-solid fa-lightbulb"></i> Recommendations
+                </a>
+                <a href="analytics.html" class="nav-item">
+                    <i class="fa-solid fa-chart-line"></i> Analytics
+                </a>
+                <a href="reports.html" class="nav-item">
+                    <i class="fa-solid fa-file-arrow-down"></i> Reports
+                </a>
+                <a href="settings.html" class="nav-item active">
+                    <i class="fa-solid fa-gear"></i> Settings
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="admin-profile">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" alt="User" class="admin-avatar">
+                    <div class="admin-info">
+                        <h4>---</h4>
+                        <!-- <span>Active Session</span> -->
+                    </div>
+                </div>
+                <button class="logout-btn" title="Logout">
+                    <i class="fa-solid fa-power-off"></i>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Wrapper -->
+        <div class="main-content">
+            <!-- Top Header -->
+            <header class="top-header">
+                <div class="header-left">
+                    <button class="menu-toggle-btn" id="menuToggleBtn">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <div class="page-title-group">
+                        <h1>System Settings</h1>
+                        <p>Configure your kitchen profile, measurement units, and dish management</p>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <div class="notification-wrapper">
+                        <button class="icon-btn" id="notificationBtn">
+                            <i class="fa-regular fa-bell"></i>
+                            <span class="notification-badge">3</span>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <main class="dashboard-content">
+                
+                <!-- Kitchen Profile Settings Card -->
+                <div class="card" style="margin-bottom: 24px;">
+                    <div class="card-header-flex" style="margin-bottom: 20px;">
+                        <div class="card-title-group">
+                            <h2><i class="fa-solid fa-user-pen" style="margin-right: 8px; color: var(--emerald-600);"></i> Kitchen / User Profile</h2>
+                            <p>Update your display name and kitchen location details</p>
+                        </div>
+                    </div>
+                    <form id="profileSettingsForm" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                        <div style="display: flex; flex-direction: column; gap: 6px;">
+                            <label style="font-size: 12px; font-weight: 600; color: var(--slate-600);">User / Kitchen Name</label>
+                            <input type="text" id="adminName" value="Kitchen User" style="padding: 10px; border-radius: var(--radius-sm); border: 1px solid var(--slate-200); background: var(--slate-50); font-size: 13px; outline: none;">
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 6px;">
+                            <label style="font-size: 12px; font-weight: 600; color: var(--slate-600);">Branch / Location</label>
+                            <input type="text" id="branchLocation" value="Main Mess & Canteen" style="padding: 10px; border-radius: var(--radius-sm); border: 1px solid var(--slate-200); background: var(--slate-50); font-size: 13px; outline: none;">
+                        </div>
+                        <div style="grid-column: 1 / -1;">
+                            <button type="button" class="btn btn-primary" id="saveProfileBtn">
+                                <i class="fa-solid fa-floppy-disk"></i> Save Profile Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- System Preferences Card -->
+                <div class="card" style="margin-bottom: 24px;">
+                    <div class="card-header-flex" style="margin-bottom: 20px;">
+                        <div class="card-title-group">
+                            <h2><i class="fa-solid fa-sliders" style="margin-right: 8px; color: var(--emerald-600);"></i> Measurement & AI Preferences</h2>
+                            <p>Configure units, waste thresholds, and automated reporting frequency</p>
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                        <div style="display: flex; flex-direction: column; gap: 6px;">
+                            <label style="font-size: 12px; font-weight: 600; color: var(--slate-600);">Default Weight Unit</label>
+                            <select id="weightUnit" style="padding: 10px; border-radius: var(--radius-sm); border: 1px solid var(--slate-200); background: var(--slate-50); font-size: 13px; outline: none;">
+                                <option value="kg" selected>Kilograms (kg)</option>
+                                <option value="g">Grams (g)</option>
+                                <option value="lbs">Pounds (lbs)</option>
+                            </select>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 6px;">
+                            <label style="font-size: 12px; font-weight: 600; color: var(--slate-600);">AI Waste Threshold Alert (kg)</label>
+                            <input type="number" id="wasteThreshold" value="50" style="padding: 10px; border-radius: var(--radius-sm); border: 1px solid var(--slate-200); background: var(--slate-50); font-size: 13px; outline: none;">
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 6px;">
+                            <label style="font-size: 12px; font-weight: 600; color: var(--slate-600);">Automated Report Frequency</label>
+                            <select id="reportFrequency" style="padding: 10px; border-radius: var(--radius-sm); border: 1px solid var(--slate-200); background: var(--slate-50); font-size: 13px; outline: none;">
+                                <option value="daily">Daily Summary</option>
+                                <option value="weekly" selected>Weekly Digest</option>
+                                <option value="monthly">Monthly Audit</option>
+                            </select>
+                        </div>
+                        <div style="grid-column: 1 / -1;">
+                            <button type="button" class="btn btn-primary" id="savePreferencesBtn">
+                                <i class="fa-solid fa-check"></i> Save Preferences
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dish Management Card (Updated without serving size) -->
+                <div class="card" style="margin-bottom: 24px;">
+                    <div class="card-header-flex" style="margin-bottom: 20px;">
+                        <div class="card-title-group">
+                            <h2><i class="fa-solid fa-utensils" style="margin-right: 8px; color: var(--emerald-600);"></i> Dish Management</h2>
+                            <p>Add new dishes to your system menu for dish-wise waste tracking</p>
+                        </div>
+                    </div>
+                    <form id="addDishForm" style="display: grid; grid-template-columns: 1fr 1fr 140px; gap: 15px; align-items: flex-end; margin-bottom: 24px;">
+                        <div style="display: flex; flex-direction: column; gap: 6px;">
+                            <label style="font-size: 12px; font-weight: 600; color: var(--slate-600);">Dish Name</label>
+                            <input type="text" id="newDishName" placeholder="e.g. Dal Makhani" required style="padding: 10px; border-radius: var(--radius-sm); border: 1px solid var(--slate-200); background: var(--slate-50); font-size: 13px; outline: none;">
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 6px;">
+                            <label style="font-size: 12px; font-weight: 600; color: var(--slate-600);">Category</label>
+                            <select id="newDishCategory" style="padding: 10px; border-radius: var(--radius-sm); border: 1px solid var(--slate-200); background: var(--slate-50); font-size: 13px; outline: none;">
+                                <option value="Main Course">Main Course</option>
+                                <option value="Starter">Starter</option>
+                                <option value="Dessert">Dessert</option>
+                                <option value="Beverage">Beverage</option>
+                            </select>
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-primary" id="addDishBtn" style="width: 100%; height: 41px;">
+                                <i class="fa-solid fa-plus"></i> Add Dish
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Existing Dishes List Table -->
+                    <div style="overflow-x: auto;">
+                        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 13px;">
+                            <thead>
+                                <tr style="border-bottom: 2px solid var(--slate-100); color: var(--slate-500);">
+                                    <th style="padding: 10px;">Dish Name</th>
+                                    <th style="padding: 10px;">Category</th>
+                                    <th style="padding: 10px; text-align: right;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dishesTableBody">
+                                <!-- Dynamic rows loaded via settings.js -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Data Management & Backup Card -->
+                <div class="card" style="margin-bottom: 24px;">
+                    <div class="card-header-flex" style="margin-bottom: 20px;">
+                        <div class="card-title-group">
+                            <h2><i class="fa-solid fa-database" style="margin-right: 8px; color: var(--emerald-600);"></i> Data Management & Backup</h2>
+                            <p>Export local system configurations or reset session cache</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                        <button type="button" class="btn btn-outline" id="exportConfigBtn">
+                            <i class="fa-solid fa-download"></i> Export Settings JSON
+                        </button>
+                        <button type="button" class="btn btn-outline" id="resetCacheBtn" style="color: #991b1b; border-color: #fca5a5;">
+                            <i class="fa-solid fa-rotate-right"></i> Reset Local Settings
+                        </button>
+                    </div>
+                </div>
+
+            </main>
+
+            <!-- Dashboard Footer -->
+            <footer class="dashboard-footer">
+                <p>&copy; 2026 FoodWaste AI Systems. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Support</a>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Supabase CDN & Settings JS Script -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="settings.js"></script>
+</body>
+</html>

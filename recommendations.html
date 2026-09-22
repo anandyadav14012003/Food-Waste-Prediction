@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Recommendations - FoodWaste AI</title>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Custom Dashboard Styles -->
+    <link rel="stylesheet" href="Dashboard.css">
+    <style>
+        .recommendation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .rec-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border-top: 4px solid #10b981;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .rec-card.warning { border-top-color: #f59e0b; }
+        .rec-card.danger { border-top-color: #ef4444; }
+        .rec-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+        .rec-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        .rec-card.warning .rec-icon { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+        .rec-card.danger .rec-icon { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+        .rec-title h3 { font-size: 18px; color: #1e293b; margin: 0; }
+        .rec-title span { font-size: 12px; color: #64748b; font-weight: 500; }
+        .rec-body p { color: #475569; font-size: 14px; line-height: 1.6; margin-bottom: 20px; }
+        .rec-footer { display: flex; justify-content: flex-end; }
+        .btn-action {
+            background: #f1f5f9;
+            color: #1e293b;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-action:hover { background: #e2e8f0; color: #0f172a; }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        
+        <!-- SIDEBAR OVERLAY FOR MOBILE -->
+        <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+        <!-- SIDEBAR NAVIGATION -->
+        <aside id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+    <a href="Dashboard.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit; width: 100%;">
+        <div class="brand-logo">
+            <i class="fa-solid fa-seedling"></i>
+        </div>
+        <div class="brand-title">
+            <h2>FoodWaste AI</h2>
+            <span>Smart Analytics</span>
+        </div>
+    </a>
+    <button class="mobile-close-btn" id="mobileCloseBtn">
+        <i class="fa-solid fa-xmark"></i>
+    </button>
+</div>
+
+            <ul class="sidebar-nav" style="list-style: none; padding: 0; margin: 20px 0;">
+                <li>
+                    <a href="dashboard.html" class="nav-item" data-page="dashboard" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: #475569; font-weight: 500; border-radius: 8px; margin-bottom: 4px;">
+                        <i class="fa-solid fa-chart-pie" style="width: 20px; text-align: center;"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="Daily_data.html" class="nav-item" data-page="add-daily-data" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: #475569; font-weight: 500; border-radius: 8px; margin-bottom: 4px;">
+                        <i class="fa-solid fa-circle-plus" style="width: 20px; text-align: center;"></i>
+                        <span>Add Daily Data</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="Food_records.html" class="nav-item" data-page="food-records" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: #475569; font-weight: 500; border-radius: 8px; margin-bottom: 4px;">
+                        <i class="fa-solid fa-utensils" style="width: 20px; text-align: center;"></i>
+                        <span>Food Records</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="Prediction.html" class="nav-item" data-page="predictions" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: #475569; font-weight: 500; border-radius: 8px; margin-bottom: 4px;">
+                        <i class="fa-solid fa-brain" style="width: 20px; text-align: center;"></i>
+                        <span>AI Predictions</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="recommendations.html" class="nav-item active" data-page="recommendations" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: #10b981; background: #ecfdf5; font-weight: 600; border-radius: 8px; margin-bottom: 4px;">
+                        <i class="fa-solid fa-lightbulb" style="width: 20px; text-align: center;"></i>
+                        <span>Recommendations</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="analytics.html" class="nav-item" data-page="analytics" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: #475569; font-weight: 500; border-radius: 8px; margin-bottom: 4px;">
+                        <i class="fa-solid fa-chart-line" style="width: 20px; text-align: center;"></i>
+                        <span>Analytics</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="reports.html" class="nav-item" data-page="reports" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: #475569; font-weight: 500; border-radius: 8px; margin-bottom: 4px;">
+                        <i class="fa-solid fa-file-arrow-down" style="width: 20px; text-align: center;"></i>
+                        <span>Reports</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="settings.html" class="nav-item" data-page="settings" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: #475569; font-weight: 500; border-radius: 8px; margin-bottom: 4px;">
+                        <i class="fa-solid fa-gear" style="width: 20px; text-align: center;"></i>
+                        <span>Settings</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-footer" style="padding-top: 15px; border-top: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">
+                <div class="admin-profile" style="display: flex; align-items: center; gap: 10px;">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" alt="User" class="admin-avatar" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover;">
+                    <div class="admin-info">
+                        <h4 id="sidebarAdminName" style="font-size: 14px; margin: 0; color: #1e293b;">---</h4>
+                        <!-- <p style="font-size: 11px; margin: 0; color: #64748b;">Indore, MP</p> -->
+                    </div>
+                </div>
+                <button class="logout-btn" title="Logout" style="background: none; border: none; color: #ef4444; font-size: 16px; cursor: pointer;">
+                    <i class="fa-solid fa-power-off"></i>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header class="topbar" style="display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: white; border-bottom: 1px solid #e2e8f0;">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <button class="menu-toggle" id="sidebarToggle" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #475569;"><i class="fa-solid fa-bars"></i></button>
+                    <div class="topbar-title">
+                        <h1 style="font-size: 20px; margin: 0; color: #1e293b;">Smart AI Recommendations</h1>
+                        <p style="font-size: 12px; margin: 0; color: #64748b;">Actionable insights derived from your real-time kitchen telemetry</p>
+                    </div>
+                </div>
+                <div class="header-right" style="display: flex; align-items: center; gap: 15px;">
+                    <div class="date-display" id="currentDateDisplay" style="font-size: 13px; font-weight: 600; color: #475569; background: #f1f5f9; padding: 6px 12px; border-radius: 6px;">
+                        <i class="fa-regular fa-calendar" style="margin-right: 6px; color: #10b981;"></i>Loading Date...
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-body" style="padding: 20px;">
+                <div class="recommendation-grid" id="recommendationsContainer">
+                    <!-- Dynamic recommendations will be injected here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Script to set current date & mobile sidebar triggers -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set Current Date in Top Header
+            const dateDisplay = document.getElementById('currentDateDisplay');
+            if (dateDisplay) {
+                const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+                const todayStr = new Date().toLocaleDateString('en-US', options);
+                dateDisplay.innerHTML = `<i class="fa-regular fa-calendar" style="margin-right: 6px; color: #10b981;"></i>${todayStr}`;
+            }
+
+            // Mobile Sidebar Toggle
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebarClose = document.getElementById('sidebarClose');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+            if (sidebarToggle && sidebar && sidebarOverlay) {
+                sidebarToggle.addEventListener('click', () => {
+                    sidebar.classList.add('show', 'active');
+                    sidebarOverlay.classList.add('show', 'active');
+                });
+            }
+
+            const closeSidebarMenu = () => {
+                if (sidebar) sidebar.classList.remove('show', 'active');
+                if (sidebarOverlay) sidebarOverlay.classList.remove('show', 'active');
+            };
+
+            if (sidebarClose) sidebarClose.addEventListener('click', closeSidebarMenu);
+            if (sidebarOverlay) sidebarOverlay.addEventListener('click', closeSidebarMenu);
+        });
+    </script>
+
+    <!-- Supabase Client Script -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="recommendations.js"></script>
+</body>
+</html>
