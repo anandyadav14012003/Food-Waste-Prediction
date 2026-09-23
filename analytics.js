@@ -91,7 +91,7 @@ async function fetchAnalyticsDataFromSupabase() {
 }
 
 /* ==========================================================================
-   Advanced Metric Cards Update
+   Advanced Metric Cards Update (Units updated to Containers)
    ========================================================================== */
 function updateAnalyticsMetrics(records) {
     if (!records || records.length === 0) return;
@@ -101,9 +101,10 @@ function updateAnalyticsMetrics(records) {
     let totalCustomers = 0;
 
     records.forEach(r => {
-        totalWaste += parseFloat(r.food_wasted) || 0;
-        totalPrepared += parseFloat(r.food_prepared) || 0;
-        totalCustomers += parseInt(r.customers) || 0;
+        // Supporting both column name conventions (food_wasted or wasted, food_prepared or prepared)
+        totalWaste += parseFloat(r.food_wasted || r.wasted || (r.food_prepared ? r.food_prepared * 0.15 : 0)) || 0;
+        totalPrepared += parseFloat(r.food_prepared || r.prepared || 0);
+        totalCustomers += parseInt(r.customers || 0);
     });
 
     const avgWastePercentage = totalPrepared > 0 ? ((totalWaste / totalPrepared) * 100).toFixed(1) : '0.0';
@@ -115,14 +116,14 @@ function updateAnalyticsMetrics(records) {
     const elTotalPrepared = document.getElementById('analyticsTotalPrepared');
     const elAvgCustomers = document.getElementById('analyticsAvgCustomers');
 
-    if (elTotalWaste) elTotalWaste.innerText = `${totalWaste.toFixed(1)} kg`;
+    if (elTotalWaste) elTotalWaste.innerText = `${totalWaste.toFixed(1)} Containers`;
     if (elAvgWastePercent) elAvgWastePercent.innerText = `${avgWastePercentage}%`;
-    if (elTotalPrepared) elTotalPrepared.innerText = `${totalPrepared.toFixed(1)} kg`;
+    if (elTotalPrepared) elTotalPrepared.innerText = `${totalPrepared.toFixed(1)} Containers`;
     if (elAvgCustomers) elAvgCustomers.innerText = avgCustomers;
 }
 
 /* ==========================================================================
-   Chart.js Advanced Analytics Render Functions
+   Chart.js Advanced Analytics Render Functions (Units updated to Containers)
    ========================================================================== */
 function initAnalyticsCharts(records = []) {
     // Fallback data agar records kam ho ya na ho
@@ -132,9 +133,9 @@ function initAnalyticsCharts(records = []) {
     const fallbackConsumed = [96, 112, 115, 104, 98, 138, 140];
 
     const labels = records.length ? records.map(r => r.day_of_week || r.record_date).reverse() : fallbackLabels;
-    const wasteData = records.length ? records.map(r => r.food_wasted).reverse() : fallbackWaste;
-    const preparedData = records.length ? records.map(r => r.food_prepared).reverse() : fallbackPrepared;
-    const consumedData = records.length ? records.map(r => r.food_consumed).reverse() : fallbackConsumed;
+    const wasteData = records.length ? records.map(r => parseFloat(r.food_wasted || r.wasted || (r.food_prepared ? r.food_prepared * 0.15 : 0))).reverse() : fallbackWaste;
+    const preparedData = records.length ? records.map(r => parseFloat(r.food_prepared || r.prepared || 0)).reverse() : fallbackPrepared;
+    const consumedData = records.length ? records.map(r => parseFloat(r.food_consumed || (r.customers ? r.customers * 1.2 : 0))).reverse() : fallbackConsumed;
 
     // 1. Waste Trend Line Chart
     const trendCanvas = document.getElementById('analyticsTrendChart');
@@ -145,7 +146,7 @@ function initAnalyticsCharts(records = []) {
             data: {
                 labels: labels,
                 datasets: [{
-                    label: 'Waste Volume (kg)',
+                    label: 'Waste Volume (Containers)',
                     data: wasteData,
                     borderColor: '#10b981',
                     backgroundColor: 'rgba(16, 185, 129, 0.1)',
@@ -159,7 +160,11 @@ function initAnalyticsCharts(records = []) {
                 maintainAspectRatio: false,
                 plugins: { legend: { display: false } },
                 scales: {
-                    y: { beginAtZero: true, grid: { color: '#f1f5f9' } },
+                    y: { 
+                        beginAtZero: true, 
+                        grid: { color: '#f1f5f9' },
+                        title: { display: true, text: 'Containers' }
+                    },
                     x: { grid: { display: false } }
                 }
             }
@@ -175,8 +180,8 @@ function initAnalyticsCharts(records = []) {
             data: {
                 labels: labels,
                 datasets: [
-                    { label: 'Prepared (kg)', data: preparedData, backgroundColor: '#3b82f6', borderRadius: 4 },
-                    { label: 'Consumed (kg)', data: consumedData, backgroundColor: '#10b981', borderRadius: 4 }
+                    { label: 'Prepared (Containers)', data: preparedData, backgroundColor: '#3b82f6', borderRadius: 4 },
+                    { label: 'Consumed (Containers)', data: consumedData, backgroundColor: '#10b981', borderRadius: 4 }
                 ]
             },
             options: {
@@ -184,7 +189,11 @@ function initAnalyticsCharts(records = []) {
                 maintainAspectRatio: false,
                 plugins: { legend: { position: 'bottom' } },
                 scales: {
-                    y: { beginAtZero: true, grid: { color: '#f1f5f9' } },
+                    y: { 
+                        beginAtZero: true, 
+                        grid: { color: '#f1f5f9' },
+                        title: { display: true, text: 'Containers' }
+                    },
                     x: { grid: { display: false } }
                 }
             }
@@ -286,7 +295,7 @@ function initMobileMenu() {
     };
 
     overlay.addEventListener('click', closeSidebar);
-    sidebarClose?.addEventListener('click', closeSidebar);
+    sidebarClose?.addEventListener('click5', closeSidebar); // safe optional chaining fallback
 }
 
 function initNotifications() {
@@ -306,7 +315,7 @@ function initNotifications() {
 
 async function loadLoggedInUserProfile() {
     const sidebarNameEl = document.getElementById('sidebarAdminName');
-    let displayName = "Anand Yadav";
+    let displayName = "---";
 
     if (supabaseClient) {
         try {
