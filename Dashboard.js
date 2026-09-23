@@ -158,8 +158,8 @@ function updateKPICards(latest) {
     const kpiWastePercent = document.getElementById('kpiWastePercent');
 
     if (kpiCustomers) kpiCustomers.innerText = latest.customers;
-    if (kpiPrepared) kpiPrepared.innerText = `${latest.food_prepared} kg`;
-    if (kpiWasted) kpiWasted.innerText = `${latest.food_wasted} kg`;
+    if (kpiPrepared) kpiPrepared.innerText = `${latest.food_prepared} Containers`; // Updated from kg to Containers
+    if (kpiWasted) kpiWasted.innerText = `${latest.food_wasted} Containers`;     // Updated from kg to Containers
     if (kpiWastePercent) kpiWastePercent.innerText = `${latest.waste_percentage}%`;
 }
 
@@ -179,12 +179,12 @@ function updateAIPredictionUI(pred) {
     
     if (foodReqEl) {
         const foodValue = pred.food_requirement ?? pred.predicted_food ?? pred.food_req ?? pred.required_food;
-        foodReqEl.innerText = `${foodValue ?? '--'} kg`;
+        foodReqEl.innerText = `${foodValue ?? '--'} Containers`; // Updated from kg to Containers
     }
     
     if (recommendedPrepEl) {
         const prepValue = pred.recommended_prep ?? pred.prep_target ?? pred.prep;
-        recommendedPrepEl.innerText = `${prepValue ?? '--'} kg`;
+        recommendedPrepEl.innerText = `${prepValue ?? '--'} Containers`; // Updated from kg to Containers
     }
 }
 
@@ -218,9 +218,9 @@ function updateRecentRecordsTable(records) {
                 <td>${formattedDate}</td>
                 <td>${dayName}</td>
                 <td>${rec.customers || 0}</td>
-                <td>${prepared} kg</td>
-                <td>${consumed} kg</td>
-                <td>${wasted} kg</td>
+                <td>${prepared} Containers</td> <!-- Updated from kg to Containers -->
+                <td>${consumed} Containers</td> <!-- Updated from kg to Containers -->
+                <td>${wasted} Containers</td>   <!-- Updated from kg to Containers -->
                 <td>${wastePercent}%</td>
                 <td><span class="status-badge ${badgeClass}">${statusText}</span></td>
             </tr>
@@ -300,7 +300,7 @@ function initializeWasteChart(range = '7days', records = []) {
         data: {
             labels: labels,
             datasets: [{
-                label: 'Waste Generated (kg)',
+                label: 'Waste Generated (Containers)', // Updated from kg to Containers
                 data: data,
                 borderColor: '#10b981',
                 backgroundColor: 'rgba(16, 185, 129, 0.08)',
@@ -360,9 +360,9 @@ function initializeConsumptionChart(records = []) {
         data: {
             labels: labels,
             datasets: [
-                { label: 'Prepared (kg)', data: prepared, backgroundColor: '#3b82f6', borderRadius: 4 },
-                { label: 'Consumed (kg)', data: consumed, backgroundColor: '#10b981', borderRadius: 4 },
-                { label: 'Wasted (kg)', data: wasted, backgroundColor: '#f59e0b', borderRadius: 4 }
+                { label: 'Prepared (Containers)', data: prepared, backgroundColor: '#3b82f6', borderRadius: 4 }, // Updated from kg to Containers
+                { label: 'Consumed (Containers)', data: consumed, backgroundColor: '#10b981', borderRadius: 4 }, // Updated from kg to Containers
+                { label: 'Wasted (Containers)', data: wasted, backgroundColor: '#f59e0b', borderRadius: 4 }     // Updated from kg to Containers
             ]
         },
         options: {
