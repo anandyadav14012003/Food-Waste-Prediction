@@ -1,6 +1,6 @@
 /**
  * AI Predictions Module - FoodWise AI
- * Final Fixed: Mapped 'food_prepared' column from database for accurate calculations.
+ * Final Fixed: Mapped 'food_prepared' column from database for accurate calculations & unit updated to Containers.
  */
 
 const SUPABASE_URL = 'https://pjtyoexscnbafcmzatzo.supabase.co';
@@ -20,7 +20,6 @@ async function checkAuthGuard() {
     try {
         const { data: { session }, error } = await supabaseClient.auth.getSession();
 
-        // Agar session na mile ya error aaye, toh login page par bhej do
         if (error || !session) {
             console.warn("Unauthorized access detected. Redirecting to login...");
             window.location.href = "login.html";
@@ -47,7 +46,6 @@ let availableDishes = [];
 let currentChartInstance = null;
 
 document.addEventListener('DOMContentLoaded', async () => {
-    // Sabse pehle Authentication check run karo
     await checkAuthGuard();
 
     loadLoggedInUser();
@@ -132,10 +130,7 @@ async function fetchFoodRecordsData() {
                         dName = 'Unknown Dish';
                     }
 
-                    // Customers mapping
                     const cust = item.customers !== undefined && item.customers !== null ? item.customers : 10;
-
-                    // Mapped exact column name from database: food_prepared
                     const prepVal = item.food_prepared !== undefined && item.food_prepared !== null ? item.food_prepared 
                         : (item.prepared !== undefined && item.prepared !== null ? item.prepared : 20);
 
@@ -198,7 +193,6 @@ function filterAndRenderPredictions(selectedDish) {
 
     const tableBody = document.getElementById('predictionTableBody');
 
-    // Tomorrow's Date
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     const tomorrowStr = tomorrow.toISOString().split('T')[0];
@@ -206,7 +200,7 @@ function filterAndRenderPredictions(selectedDish) {
     if (filteredData.length === 0) {
         document.getElementById('predTargetDate').textContent = tomorrowStr;
         document.getElementById('predCustomers').textContent = '--';
-        document.getElementById('predPrep').textContent = '-- kg';
+        document.getElementById('predPrep').textContent = '-- Containers';
         document.getElementById('predConfidence').textContent = '--%';
 
         if (tableBody) {
@@ -220,10 +214,8 @@ function filterAndRenderPredictions(selectedDish) {
         return;
     }
 
-    // Sort descending by date to get latest records first
     const sortedDesc = [...filteredData].sort((a, b) => new Date(b.target_date) - new Date(a.target_date));
     
-    // SMART 2-DAY MOVING AVERAGE LOGIC
     const recentTwoDays = sortedDesc.slice(0, 2);
     const sumCust = recentTwoDays.reduce((acc, curr) => acc + curr.customers, 0);
     const sumPrep = recentTwoDays.reduce((acc, curr) => acc + curr.prepared, 0);
@@ -233,7 +225,7 @@ function filterAndRenderPredictions(selectedDish) {
 
     document.getElementById('predTargetDate').textContent = tomorrowStr;
     document.getElementById('predCustomers').textContent = predictedCustomers;
-    document.getElementById('predPrep').textContent = `${recommendedPrep} kg`;
+    document.getElementById('predPrep').textContent = `${recommendedPrep} Containers`;
     document.getElementById('predConfidence').textContent = '94%';
 
     const combinedRows = [
@@ -241,7 +233,7 @@ function filterAndRenderPredictions(selectedDish) {
             target_date: tomorrowStr,
             dish_name: selectedDish === 'all' ? 'All Dishes (Average)' : selectedDish,
             predicted_customers: predictedCustomers,
-            recommended_prep: `${recommendedPrep} kg`,
+            recommended_prep: `${recommendedPrep} Containers`,
             confidence_level: '94% (AI 2-Day Avg)'
         }
     ];
@@ -251,7 +243,7 @@ function filterAndRenderPredictions(selectedDish) {
             target_date: item.target_date,
             dish_name: item.dish_name,
             predicted_customers: item.customers,
-            recommended_prep: `${item.prepared} kg`,
+            recommended_prep: `${item.prepared} Containers`,
             confidence_level: '100% (Historical)'
         });
     });
@@ -309,7 +301,7 @@ function renderPredictionChart(data, selectedDish, nextCust, nextPrep, nextDate)
                     yAxisID: 'y'
                 },
                 {
-                    label: 'Prepared (kg)',
+                    label: 'Prepared (Containers)',
                     data: prep,
                     borderColor: '#10b981',
                     backgroundColor: 'rgba(16, 185, 129, 0.1)',
@@ -346,7 +338,7 @@ function renderPredictionChart(data, selectedDish, nextCust, nextPrep, nextDate)
                     display: true,
                     position: 'right',
                     grid: { drawOnChartArea: false },
-                    title: { display: true, text: 'Prepared (kg)' }
+                    title: { display: true, text: 'Prepared (Containers)' }
                 }
             }
         }
