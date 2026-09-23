@@ -1,5 +1,5 @@
 /**
- * Food Records Display Module - FoodWise Project
+ * Food Records Display Module - FoodWaste AI Project
  * Fetches and renders all data from Supabase table 'food_records', handles authentication session, and sidebar interactions.
  */
 
@@ -37,7 +37,7 @@ async function checkAuthGuard() {
 if (supabaseClient) {
     supabaseClient.auth.onAuthStateChange((event, session) => {
         if (event === 'SIGNED_OUT' || !session) {
-            window.location.href = "login.html";
+            window.location.href = "index.html";
         }
     });
 }
@@ -143,9 +143,9 @@ async function fetchAllRecords() {
                     <td style="padding: 12px; font-weight: 500; color: #1e293b;">${formattedDate}</td>
                     <td style="padding: 12px; color: #64748b;">${dayName}</td>
                     <td style="padding: 12px; color: #1e293b;">${rec.customers || 0}</td>
-                    <td style="padding: 12px; color: #1e293b;">${prepared} kg</td>
-                    <td style="padding: 12px; color: #1e293b;">${consumed} kg</td>
-                    <td style="padding: 12px; color: #1e293b;">${wasted} kg</td>
+                    <td style="padding: 12px; color: #1e293b;">${prepared} Containers</td>
+                    <td style="padding: 12px; color: #1e293b;">${consumed} Containers</td>
+                    <td style="padding: 12px; color: #1e293b;">${wasted} Containers</td>
                     <td style="padding: 12px; font-weight: 600; color: #1e293b;">${wastePercent}%</td>
                     <td style="padding: 12px;"><span style="${badgeStyle}">${statusText}</span></td>
                 </tr>
@@ -189,7 +189,7 @@ function initLogoutHandler() {
                 if (supabaseClient) {
                     await supabaseClient.auth.signOut();
                 }
-                window.location.href = 'index.html';
+                window.location.href = 'login.html';
             }
         });
     }
