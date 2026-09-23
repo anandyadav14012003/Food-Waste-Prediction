@@ -457,7 +457,7 @@ function initSidebarNavigation() {
             } else if (pageName === 'analytics') {
                 window.location.href = 'Analytics.html';
             } else if (pageName === 'recommendations') {
-                window.location.href = 'Recommendations.html';
+                window.location.href = 'recommendations.html';
             } else if (pageName === 'reports') {
                 window.location.href = 'reports.html';
             } else if (pageName === 'settings') {
