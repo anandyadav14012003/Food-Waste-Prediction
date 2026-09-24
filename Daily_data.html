@@ -35,67 +35,42 @@
     </button>
 </div>
 
-            <ul class="sidebar-nav" style="list-style: none; padding: 0; margin: 20px 0;">
-                <li>
-                    <a href="Dashboard.html" class="nav-item" data-page="dashboard" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: #475569; font-weight: 500; border-radius: 8px; margin-bottom: 4px;">
-                        <i class="fa-solid fa-chart-pie" style="width: 20px; text-align: center;"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="Daily_data.html" class="nav-item active" data-page="add-daily-data" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: #10b981; background: #ecfdf5; font-weight: 600; border-radius: 8px; margin-bottom: 4px;">
-                        <i class="fa-solid fa-circle-plus" style="width: 20px; text-align: center;"></i>
-                        <span>Add Daily Data</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="Food_records.html" class="nav-item" data-page="food-records" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: #475569; font-weight: 500; border-radius: 8px; margin-bottom: 4px;">
-                        <i class="fa-solid fa-utensils" style="width: 20px; text-align: center;"></i>
-                        <span>Food Records</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="Prediction.html" class="nav-item" data-page="predictions" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: #475569; font-weight: 500; border-radius: 8px; margin-bottom: 4px;">
-                        <i class="fa-solid fa-brain" style="width: 20px; text-align: center;"></i>
-                        <span>AI Predictions</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="recommendations.html" class="nav-item" data-page="recommendations" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: #475569; font-weight: 500; border-radius: 8px; margin-bottom: 4px;">
-                        <i class="fa-solid fa-lightbulb" style="width: 20px; text-align: center;"></i>
-                        <span>Recommendations</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="Analytics.html" class="nav-item" data-page="analytics" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: #475569; font-weight: 500; border-radius: 8px; margin-bottom: 4px;">
-                        <i class="fa-solid fa-chart-line" style="width: 20px; text-align: center;"></i>
-                        <span>Analytics</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="reports.html" class="nav-item" data-page="reports" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: #475569; font-weight: 500; border-radius: 8px; margin-bottom: 4px;">
-                        <i class="fa-solid fa-file-arrow-down" style="width: 20px; text-align: center;"></i>
-                        <span>Reports</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="settings.html" class="nav-item" data-page="settings" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: #475569; font-weight: 500; border-radius: 8px; margin-bottom: 4px;">
-                        <i class="fa-solid fa-gear" style="width: 20px; text-align: center;"></i>
-                        <span>Settings</span>
-                    </a>
-                </li>
-            </ul>
+            <nav class="sidebar-nav">
+                <a href="Dashboard.html" class="nav-item">
+                    <i class="fa-solid fa-chart-pie"></i> Dashboard
+                </a>
+                <a href="Daily_data.html" class="nav-item active">
+                    <i class="fa-solid fa-circle-plus"></i> Add Daily Data
+                </a>
+                <a href="Food_records.html" class="nav-item">
+                    <i class="fa-solid fa-utensils"></i> Food Records
+                </a>
+                <a href="Prediction.html" class="nav-item">
+                    <i class="fa-solid fa-brain"></i> AI Predictions
+                </a>
+                <a href="recommendations.html" class="nav-item">
+                    <i class="fa-solid fa-lightbulb"></i> Recommendations
+                </a>
+                <a href="Analytics.html" class="nav-item">
+                    <i class="fa-solid fa-chart-line"></i> Analytics
+                </a>
+                <a href="reports.html" class="nav-item">
+                    <i class="fa-solid fa-file-arrow-down"></i> Reports
+                </a>
+                <a href="settings.html" class="nav-item">
+                    <i class="fa-solid fa-gear"></i> Settings
+                </a>
+            </nav>
 
-            <div class="sidebar-footer" style="padding-top: 15px; border-top: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">
-                <div class="admin-profile" style="display: flex; align-items: center; gap: 10px;">
-                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" alt="User" class="admin-avatar" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover;">
+            <div class="sidebar-footer">
+                <div class="admin-profile">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUy-t00mImJn20OoJQGOZ-hpNBUnrKty6pmaC96C6r_Q&s=10?auto=format&fit=crop&q=80&w=150" alt="Admin Avatar" class="admin-avatar">
                     <div class="admin-info">
-                        <h4 id="sidebarAdminName" style="font-size: 14px; margin: 0; color: #1e293b;">---</h4>
-                        <!-- <p style="font-size: 11px; margin: 0; color: #64748b;">Indore, MP</p> -->
+                        <h4 id="sidebarAdminName">---</h4>
                     </div>
                 </div>
-                <button class="logout-btn" title="Logout" style="background: none; border: none; color: #ef4444; font-size: 16px; cursor: pointer;">
-                    <i class="fa-solid fa-power-off"></i>
+                <button class="logout-btn" id="logoutBtn" title="Logout">
+                    <i class="fa-solid fa-right-from-bracket"></i>
                 </button>
             </div>
         </aside>
