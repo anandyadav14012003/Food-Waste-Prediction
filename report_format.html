@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Waste & Records Report</title>
+
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- jsPDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <!-- jsPDF AutoTable -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7f6;
+            color: #222;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 1400px;
+            margin: 30px auto;
+        }
+
+        .header {
+            background: #198754;
+            color: white;
+            padding: 25px;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .header h1 {
+            font-size: 26px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 14px;
+        }
+
+        .controls {
+            background: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .date-filter {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .date-filter label {
+            font-weight: bold;
+        }
+
+        input[type="date"] {
+            padding: 9px 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            border: none;
+            padding: 10px 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .btn-pdf {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-pdf:hover {
+            background: #bb2d3b;
+        }
+
+        .btn-reset {
+            background: white;
+            color: #333;
+            border: 1px solid #ccc;
+            padding: 8px 12px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-reset:hover {
+            background: #f8f9fa;
+        }
+
+        .summary {
+            background: white;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+        }
+
+        .summary-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 18px;
+            text-align: center;
+            background: #fafafa;
+        }
+
+        .summary-card h3 {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .summary-card p {
+            font-size: 23px;
+            font-weight: bold;
+            color: #198754;
+        }
+
+        .table-container {
+            background: white;
+            padding: 20px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1100px;
+        }
+
+        th {
+            background: #198754;
+            color: white;
+            padding: 12px 8px;
+            border: 1px solid #147347;
+            font-size: 13px;
+        }
+
+        td {
+            padding: 10px 8px;
+            border: 1px solid #ddd;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .high-waste {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .normal-waste {
+            color: #198754;
+            font-weight: bold;
+        }
+
+        .no-record {
+            text-align: center;
+            padding: 30px;
+            color: #777;
+        }
+
+        .footer {
+            background: white;
+            padding: 15px;
+            text-align: center;
+            color: #777;
+            font-size: 12px;
+            border-radius: 0 0 10px 10px;
+        }
+
+        @media (max-width: 900px) {
+            .summary {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 500px) {
+            .summary {
+                grid-template-columns: 1fr;
+            }
+            .header h1 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+        <h1>🍛 Food Waste Prediction & Intelligent Recommendation System</h1>
+        <p>Daily Food Records Management (Live Database Report)</p>
+    </div>
+
+    <!-- CONTROLS -->
+    <div class="controls">
+        <div class="date-filter">
+            <label for="dateFilter">Filter Date:</label>
+            <input type="date" id="dateFilter" onchange="filterRecords()">
+            <button class="btn-reset" onclick="resetFilter()" title="Reset / Show All">🔄</button>
+        </div>
+
+        <button class="btn-pdf" onclick="downloadPDF()">
+            📄 Download Complete PDF
+        </button>
+    </div>
+
+    <!-- SUMMARY -->
+    <div class="summary">
+        <div class="summary-card">
+            <h3>Total Records</h3>
+            <p id="totalRecords">0</p>
+        </div>
+        <div class="summary-card">
+            <h3>Total Customers</h3>
+            <p id="totalCustomers">0</p>
+        </div>
+        <div class="summary-card">
+            <h3>Food Prepared</h3>
+            <p id="totalPrepared">0</p>
+        </div>
+        <div class="summary-card">
+            <h3>Food Consumed</h3>
+            <p id="totalConsumed">0</p>
+        </div>
+        <div class="summary-card">
+            <h3>Food Wasted</h3>
+            <p id="totalWasted">0</p>
+        </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>S.No.</th>
+                    <th>Date</th>
+                    <th>Day</th>
+                    <th>Customers</th>
+                    <th>Food Prepared</th>
+                    <th>Food Consumed</th>
+                    <th>Food Wasted</th>
+                    <th>Waste %</th>
+                    <th>Weather</th>
+                    <th>Holiday</th>
+                    <th>Special Event</th>
+                </tr>
+            </thead>
+            <tbody id="recordsTable">
+                <tr>
+                    <td colspan="11" class="no-record">Loading records from database...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        Food Waste Prediction & Intelligent Food Quantity Recommendation System
+    </div>
+
+</div>
+
+<script>
+    // Supabase Credentials
+    const SUPABASE_URL = 'https://pjtyoexscnbafcmzatzo.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_gEEREmvfXn_sCRLqz26z1A_VQpLG6IB';
+
+    let supabaseClient = null;
+    try {
+        if (window.supabase) {
+            supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        }
+    } catch (err) {
+        console.error("Supabase init error:", err);
+    }
+
+    let foodRecords = [];
+    let currentRecords = [];
+
+    // Fetch Data from Supabase on Page Load
+    document.addEventListener("DOMContentLoaded", async () => {
+        await fetchFoodRecordsFromSupabase();
+    });
+
+    async function fetchFoodRecordsFromSupabase() {
+        if (!supabaseClient) {
+            console.error("Supabase client not initialized.");
+            document.getElementById("recordsTable").innerHTML = `<tr><td colspan="11" class="no-record" style="color: red;">Database connection error.</td></tr>`;
+            return;
+        }
+
+        try {
+            const { data, error } = await supabaseClient
+                .from('food_records') 
+                .select('*')
+                .order('record_date', { ascending: false });
+
+            if (error) {
+                console.error('Error fetching records:', error.message);
+                document.getElementById("recordsTable").innerHTML = `<tr><td colspan="11" class="no-record" style="color: red;">Error: ${error.message}</td></tr>`;
+                return;
+            }
+
+            if (data) {
+                foodRecords = data.map(item => {
+                    const recordDateStr = item.record_date;
+                    let calculatedDay = item.day;
+                    if (!calculatedDay && recordDateStr) {
+                        const d = new Date(recordDateStr);
+                        calculatedDay = d.toLocaleDateString('en-US', { weekday: 'long' });
+                    }
+
+                    return {
+                        date: recordDateStr,
+                        day: calculatedDay || '-',
+                        customers: item.customers || 0,
+                        prepared: item.food_prepared || 0,
+                        consumed: item.food_consumed || 0,
+                        wasted: item.food_wasted || 0,
+                        weather: item.weather || '-',
+                        holiday: item.holiday || 'No',
+                        specialEvent: item.special_event || item.specialEvent || 'No'
+                    };
+                });
+
+                currentRecords = [...foodRecords];
+                displayRecords(currentRecords);
+            }
+        } catch (err) {
+            console.error('Unexpected error:', err);
+        }
+    }
+
+    /* ==========================================
+        DISPLAY RECORDS
+    ========================================== */
+    function displayRecords(records) {
+        const table = document.getElementById("recordsTable");
+        table.innerHTML = "";
+
+        if (records.length === 0) {
+            table.innerHTML = `
+                <tr>
+                    <td colspan="11" class="no-record">
+                        No food records found.
+                    </td>
+                </tr>
+            `;
+            updateSummary([]);
+            return;
+        }
+
+        records.forEach((record, index) => {
+            let wastePercentage = 0;
+            if (record.prepared > 0) {
+                wastePercentage = (record.wasted / record.prepared) * 100;
+            }
+
+            let wasteClass = wastePercentage >= 10 ? "high-waste" : "normal-waste";
+
+            table.innerHTML += `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>${record.date}</td>
+                    <td>${record.day}</td>
+                    <td>${record.customers}</td>
+                    <td>${record.prepared}</td>
+                    <td>${record.consumed}</td>
+                    <td>${record.wasted}</td>
+                    <td class="${wasteClass}">${wastePercentage.toFixed(2)}%</td>
+                    <td>${record.weather}</td>
+                    <td>${record.holiday}</td>
+                    <td>${record.specialEvent}</td>
+                </tr>
+            `;
+        });
+
+        updateSummary(records);
+    }
+
+    /* ==========================================
+        UPDATE SUMMARY
+    ========================================== */
+    function updateSummary(records) {
+        let customers = 0;
+        let prepared = 0;
+        let consumed = 0;
+        let wasted = 0;
+
+        records.forEach(record => {
+            customers += Number(record.customers);
+            prepared += Number(record.prepared);
+            consumed += Number(record.consumed);
+            wasted += Number(record.wasted);
+        });
+
+        document.getElementById("totalRecords").innerText = records.length;
+        document.getElementById("totalCustomers").innerText = customers;
+        document.getElementById("totalPrepared").innerText = prepared.toFixed(2);
+        document.getElementById("totalConsumed").innerText = consumed.toFixed(2);
+        document.getElementById("totalWasted").innerText = wasted.toFixed(2);
+    }
+
+    /* ==========================================
+        FILTER RECORDS BY DATE
+    ========================================== */
+    function filterRecords() {
+        const selectedDate = document.getElementById("dateFilter").value;
+
+        if (!selectedDate) {
+            currentRecords = [...foodRecords];
+            displayRecords(currentRecords);
+            return;
+        }
+
+        currentRecords = foodRecords.filter(record => record.date === selectedDate);
+        displayRecords(currentRecords);
+    }
+
+    /* ==========================================
+        RESET FILTER (SHOW ALL)
+    ========================================== */
+    function resetFilter() {
+        document.getElementById("dateFilter").value = "";
+        currentRecords = [...foodRecords];
+        displayRecords(currentRecords);
+    }
+
+    /* ==========================================
+        DOWNLOAD PDF (A4 Portrait Format)
+    ========================================== */
+    function downloadPDF() {
+        if (currentRecords.length === 0) {
+            alert("No food records available for PDF generation.");
+            return;
+        }
+
+        const { jsPDF } = window.jspdf;
+        // Portrait mode enabled (orientation removed/defaulted to portrait)
+        const pdf = new jsPDF({
+            orientation: "portrait",
+            unit: "mm",
+            format: "a4"
+        });
+
+        const pageWidth = pdf.internal.pageSize.getWidth();
+
+        // Title
+        pdf.setFontSize(15);
+        pdf.setTextColor(25, 135, 84);
+        pdf.text("Food Waste Prediction & Intelligent", pageWidth / 2, 15, { align: "center" });
+
+        pdf.setFontSize(12);
+        pdf.setTextColor(0, 0, 0);
+        pdf.text("Daily Food Records Report", pageWidth / 2, 22, { align: "center" });
+
+        // Generated Date/Time
+        const today = new Date();
+        const generatedDate = today.toLocaleDateString("en-IN") + " " + today.toLocaleTimeString("en-IN");
+
+        pdf.setFontSize(8);
+        pdf.setTextColor(100, 100, 100);
+        pdf.text("Report Generated: " + generatedDate, pageWidth / 2, 28, { align: "center" });
+
+        // Summary Stats Calculation
+        let totalCustomers = 0;
+        let totalPrepared = 0;
+        let totalConsumed = 0;
+        let totalWasted = 0;
+
+        currentRecords.forEach(record => {
+            totalCustomers += Number(record.customers);
+            totalPrepared += Number(record.prepared);
+            totalConsumed += Number(record.consumed);
+            totalWasted += Number(record.wasted);
+        });
+
+        const totalWastePercentage = totalPrepared > 0 ? (totalWasted / totalPrepared) * 100 : 0;
+
+        pdf.setFontSize(9);
+        pdf.setTextColor(0, 0, 0);
+        pdf.text("Total Records: " + currentRecords.length, 14, 36);
+        pdf.text("Total Customers: " + totalCustomers, 60, 36);
+        pdf.text("Food Prepared: " + totalPrepared.toFixed(2), 110, 36);
+        pdf.text("Food Consumed: " + totalConsumed.toFixed(2), 158, 36);
+        pdf.text("Food Wasted: " + totalWasted.toFixed(2), 14, 42);
+        pdf.text("Overall Waste: " + totalWastePercentage.toFixed(2) + "%", 60, 42);
+
+        // Table Rows Setup
+        const tableData = currentRecords.map((record, index) => {
+            const wastePercentage = record.prepared > 0 ? (record.wasted / record.prepared) * 100 : 0;
+            return [
+                index + 1,
+                record.date,
+                record.day,
+                record.customers,
+                record.prepared,
+                record.consumed,
+                record.wasted,
+                wastePercentage.toFixed(2) + "%",
+                record.weather,
+                record.holiday,
+                record.specialEvent
+            ];
+        });
+
+        pdf.autoTable({
+            startY: 48,
+            head: [[
+                "S.No.", "Date", "Day", "Customers", "Prepared", "Consumed", 
+                "Wasted", "Waste %", "Weather", "Holiday", "Special Event"
+            ]],
+            body: tableData,
+            theme: "grid",
+            headStyles: {
+                fillColor: [25, 135, 84],
+                textColor: [255, 255, 255],
+                fontSize: 7,
+                halign: "center"
+            },
+            bodyStyles: {
+                fontSize: 6.5,
+                halign: "center"
+            },
+            alternateRowStyles: {
+                fillColor: [245, 245, 245]
+            },
+            margin: { left: 10, right: 10 },
+            didDrawPage: function(data) {
+                const currentPageWidth = pdf.internal.pageSize.getWidth();
+                const pageHeight = pdf.internal.pageSize.getHeight();
+                const pageNumber = pdf.internal.getNumberOfPages();
+
+                pdf.setFontSize(7.5);
+                pdf.setTextColor(100, 100, 100);
+                pdf.text(
+                    "Food Waste Prediction & Intelligent Food Quantity Recommendation System",
+                    currentPageWidth / 2,
+                    pageHeight - 8,
+                    { align: "center" }
+                );
+                pdf.text(
+                    "Page " + pageNumber,
+                    currentPageWidth - 10,
+                    pageHeight - 8,
+                    { align: "right" }
+                );
+            }
+        });
+
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        const fileName = "Food_Records_Report_" + year + "_" + month + "_" + day + ".pdf";
+
+        pdf.save(fileName);
+    }
+</script>
+
+</body>
+</html>
